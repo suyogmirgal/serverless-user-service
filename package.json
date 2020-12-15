@@ -1,0 +1,14 @@
+{
+  "name": "hello-world-with-CircleCi",
+  "description": "",
+  "version": "0.1.0",
+  "scripts": {
+    "serverless:deploy": "./node_modules/serverless/bin/serverless deploy",
+    "serverless:package": "./node_modules/serverless/bin/serverless package"
+  },
+  "dependencies": {
+    "serverless": "1.47.0",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.8.0"
+  }
+}

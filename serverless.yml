@@ -1,0 +1,53 @@
+service: user-service
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'local'}
+  environment:
+    USER_TABLE: '${self:provider.stage}-userDetails'
+
+custom:
+  dynamodb:
+    stages:
+      - local
+    start:
+      port: 8000
+      migrate: true
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+
+functions:
+  health:
+    handler: src.handlers.health_check_handler.health
+    events:
+      - http:
+          path: user-service/health
+          method: get
+          cors: true
+
+  createUser:
+    handler: src.handlers.create_user_handler.create_user
+    events:
+      - http:
+          path: user
+          method: post
+          cors: true
+
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: '${self:provider.stage}-userDetails'
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
