@@ -9,6 +9,7 @@
   "dependencies": {
     "serverless": "1.47.0",
     "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline-sqs": "^4.1.1",
     "serverless-offline": "^6.8.0"
   }
 }

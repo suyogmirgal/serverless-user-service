@@ -15,8 +15,18 @@ custom:
       port: 8000
       migrate: true
 
+  serverless-offline-sqs:
+    autoCreate: true
+    apiVersion: '2012-11-05'
+    endpoint: http://localhost:9324
+    region: eu-west-1
+    accessKeyId: root
+    secretAccessKey: root
+    skipCacheInvalidation: false
+
 plugins:
   - serverless-dynamodb-local
+  - serverless-offline-sqs
   - serverless-offline
 
 functions:
@@ -29,6 +39,7 @@ functions:
           cors: true
 
   createUser:
+    name: ${self:provider.stage}-${self:service}-createUser
     handler: src.handlers.create_user_handler.create_user
     events:
       - http:
@@ -36,8 +47,16 @@ functions:
           method: post
           cors: true
 
+  userInputSQSHandler:
+    name: ${self:provider.stage}-${self:service}-userInputSQSHandler
+    handler: src/handlers/user_input_sqs_handler.create_user
+    events:
+      - sqs:
+          arn: !GetAtt userInputSQS.Arn
+
 resources:
   Resources:
+    #DynamoDB
     usersTable:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -51,3 +70,9 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+    #SQS
+    userInputSQS:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: '${self:provider.stage}-userInputSQS'

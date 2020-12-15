@@ -3,12 +3,15 @@ import requests
 import pytest
 import json
 import boto3
+import time
 from boto3.dynamodb.conditions import Attr
 
 USER_SERVICE_BASE_URL = "http://localhost:3000"
 ENV = "local"
 DYNAMO_ENDPOINT_URL = "http://localhost:8000"
 DYNAMO_LOCAL_USER_TABLE = "local-userDetails"
+SQS_ENDPOINT_URL = "http://localhost:9324/queue"
+USER_INPUT_SQS_URL = "http://localhost:9324/queue/local-userInputSQS"
 
 
 @pytest.fixture(scope="function")
@@ -122,3 +125,49 @@ def verify_user_created_by_api_request_for_given_user_details(
     assert user["firstName"] == first_name
     assert user["lastName"] == last_name
     assert user["dob"] == dob
+
+
+@scenario("user_service.feature", "successful user creation from userInputSQS")
+def test_successful_user_creation_from_sqs(context):
+    pass
+
+
+@when(
+    "message received in userInputSQS with Email as <email>, First name as <first_name>, Last name as <last_name> and"
+    " DOB as <dob> is made"
+)
+def push_message_to_user_input_sqs(email, first_name, last_name, dob):
+    user_data = {
+        "first_name": first_name,
+        "last_name": last_name,
+        "email": email,
+        "dob": dob,
+    }
+    sqs = boto3.client("sqs", endpoint_url=SQS_ENDPOINT_URL)
+    sqs.send_message(QueueUrl=USER_INPUT_SQS_URL, MessageBody=(json.dumps(user_data)))
+
+
+@then(
+    "user is successfully created with Email as <email>, First name as <first_name>, Last name as <last_name> and DOB "
+    "as <dob>"
+)
+def verify_user_created_from_user_input_sqs(email, first_name, last_name, dob):
+    # verify user details created in userDetail dynamoDB table
+    counter = 0
+    while True:
+        dynamodb = boto3.resource("dynamodb", endpoint_url=DYNAMO_ENDPOINT_URL)
+        user_table = dynamodb.Table(DYNAMO_LOCAL_USER_TABLE)
+        search_result = user_table.scan(FilterExpression=Attr("email").eq(email))
+
+        if len(search_result["Items"]) == 0 and counter < 10:
+            time.sleep(1)
+            counter += 1
+            continue
+        elif len(search_result["Items"]) > 0:
+            user = search_result["Items"][0]
+            assert user["firstName"] == first_name
+            assert user["lastName"] == last_name
+            assert user["dob"] == dob
+            break
+        elif counter == 10:
+            assert False, f"User {email} from SQS is not created"
