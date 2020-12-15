@@ -18,6 +18,8 @@ jobs:
       working_directory: ~/repo
       executor: python
       steps:
+        - setup_remote_docker:
+            version: 19.03.13
         - checkout
         - *pip_install
         - run:

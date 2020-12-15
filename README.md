@@ -3,13 +3,13 @@
 - This is Sample Serverless user Project with Circle ci configuration
 
 
-##Local Environment:
+## Local Environment:
 
-##Dynamo DB:
+## Dynamo DB:
 
 Web Console: http://localhost:8000/shell/
 
-####DynamoDB JavaScript Shell
+#### DynamoDB JavaScript Shell
 List all tables:
 
 ```
@@ -51,7 +51,7 @@ dynamodb.scan(params, function(err, data) {
 });
 ```
 
-##SQS:
+## SQS:
 
 Push message in default SQS:
 

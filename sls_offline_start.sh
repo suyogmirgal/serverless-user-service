@@ -19,6 +19,7 @@ echo $PID > .offline.pid
 while ! grep "server ready" $TMPFILE
 do
 echo 'starting ...'
+echo `cat 1`
 sleep 1; done
 
 echo 'serverless offline started'
