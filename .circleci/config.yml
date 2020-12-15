@@ -1,0 +1,34 @@
+version: 2.1
+
+executors:
+  python:
+    docker:
+      - image: circleci/python:3.7.3-node
+
+
+references:
+  pip_install: &pip_install
+    run:
+      command: |
+        sudo pip install pipenv
+        pipenv install --dev --ignore-pipfile
+
+jobs:
+  test:
+      working_directory: ~/repo
+      executor: python
+      steps:
+        - checkout
+        - *pip_install
+        - run:
+            command: |
+              sudo npm i -g serverless
+              npm ci
+              bash sls_offline_start.sh
+              pipenv run pytest
+              bash sls_offline_stop.sh
+
+workflows:
+  main:
+    jobs:
+      - test
