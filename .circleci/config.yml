@@ -14,15 +14,20 @@ references:
         pipenv install --dev --ignore-pipfile
 
 jobs:
+  build:
+    machine: true
+    steps:
+      - checkout
+      - run: |
+          echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
+          docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -d roribio16/alpine-sqs:latest
+
   test:
       machine: true
       working_directory: ~/repo
       executor: python
       steps:
         - checkout
-        - run: |
-            echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
-            docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -d roribio16/alpine-sqs:latest
         - *pip_install
         - run:
             command: |
@@ -35,4 +40,5 @@ jobs:
 workflows:
   main:
     jobs:
+      - build
       - test
