@@ -14,7 +14,6 @@ references:
         pipenv install --dev --ignore-pipfile
 
 jobs:
-
   test:
       machine: true
       working_directory: ~/repo
