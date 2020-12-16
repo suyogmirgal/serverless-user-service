@@ -100,7 +100,7 @@ aws --endpoint-url http://localhost:9324 sqs send-message --queue-url http://loc
 Push message in default local-userInputSQS:
 
 ```
-aws --endpoint-url http://localhost:9324 sqs send-message --queue-url http://localhost:9324/queue/local-userInputSQS --message-body "{\"first_name\": \"Suyog\", \"last_name\": \"M\", \"email\": \"suyog@mail.com\", \"dob\": \"2000-11-11\"}"
+aws --endpoint-url http://localhost:9324 sqs send-message --queue-url http://localhost:9324/queue/local-userInputSQS --message-body "{\"first_name\": \"Suyog\", \"last_name\": \"M\", \"email\": \"suyog_sqs@mail.com\", \"dob\": \"2000-11-11\"}"
 
 ```
 
