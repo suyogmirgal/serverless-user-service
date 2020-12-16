@@ -56,7 +56,7 @@ dynamodb.listTables(function(err, data) {
 });
 ```
 
-Scan table:
+Scan userDetails table:
 
 ```
 var params = {
@@ -68,7 +68,7 @@ dynamodb.scan(params, function(err, data) {
 });
 ```
 
-Scan table by email:
+Scan userDetails table for specific email attribute:
 
 ```
 var input_email = 'test_api_user1@mail.com';
@@ -104,7 +104,7 @@ aws --endpoint-url http://localhost:9324 sqs send-message --queue-url http://loc
 
 ```
 
-###Useful Links:
+### Useful Links:
 1. Serverless Offline:
    https://www.npmjs.com/package/serverless-offline
 
