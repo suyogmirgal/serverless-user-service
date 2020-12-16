@@ -1,3 +1,17 @@
 sls dynamodb install
 
 kill $(lsof -ti:3000,3002,8000)
+
+###########################
+report:
+
+npm i allure-commandline
+
+pytest -v --html=basic.html
+
+https://github.com/baev/allure-cli-depricated/releases/tag/allure-cli-2.4
+allure upgrare
+
+export JAVA_HOME="$(/usr/libexec/java_home -v 1.8)"
+
+https://stackoverflow.com/questions/26434791/generating-allure-report-using-pytest
