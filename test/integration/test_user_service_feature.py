@@ -134,7 +134,7 @@ def test_successful_user_creation_from_sqs(context):
 
 @when(
     "message received in userInputSQS with Email as <email>, First name as <first_name>, Last name as <last_name> and"
-    " DOB as <dob> is made"
+    " DOB as <dob>"
 )
 def push_message_to_user_input_sqs(email, first_name, last_name, dob):
     user_data = {

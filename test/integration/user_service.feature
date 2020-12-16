@@ -16,7 +16,7 @@ Feature: User Service
 
     Scenario Outline: successful user creation from userInputSQS
         Given user service up and running
-        When message received in userInputSQS with Email as <email>, First name as <first_name>, Last name as <last_name> and DOB as <dob> is made
+        When message received in userInputSQS with Email as <email>, First name as <first_name>, Last name as <last_name> and DOB as <dob>
         Then user is successfully created with Email as <email>, First name as <first_name>, Last name as <last_name> and DOB as <dob>
         Examples:
         | email                   | first_name  | last_name | dob        |
