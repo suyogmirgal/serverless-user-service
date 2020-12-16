@@ -19,9 +19,6 @@ jobs:
       working_directory: ~/repo
       executor: python
       steps:
-        - run:
-            name: Install Docker client
-            command: apk add docker-cli
         - checkout
         - *pip_install
         - run:
