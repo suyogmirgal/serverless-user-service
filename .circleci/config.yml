@@ -15,11 +15,13 @@ references:
 
 jobs:
   test:
-      machine: true
       working_directory: ~/repo
       executor: python
       steps:
         - checkout
+        - run:
+            name: Install Docker client
+            command: apk add docker-cli
         - *pip_install
         - run:
             command: |

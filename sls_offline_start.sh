@@ -2,7 +2,7 @@ TMPFILE=.offline$$.log
 
 #start local SQS
 echo 'Start -> Local SQS'
-#docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -d roribio16/alpine-sqs:latest
+docker run --name alpine-sqs -p 9324:9324 -p 9325:9325 -d roribio16/alpine-sqs:latest
 sleep 5
 echo 'local SQS started'
 
